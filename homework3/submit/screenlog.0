@@ -1,0 +1,141 @@
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ cat -[K./runincontainer.sh
+[?2004l#!/bin/sh
+
+# This command below runs the script using the container `mnxb11_al9.latest.sif` with minimum required parameters
+# It is simpler than startmnxb11container.sh because we need much less options to run in batch
+# It is best for running on batch systems
+# -B mounts the project directory inside the container so that is visible also inside the container
+# You can add parameters to the application by adding them at the end of the line
+# Example: apptainer run -B /projects:/projects /projects/hep/fs10/mnxb11/containers/mnxb11_al9.latest.sif ./buildnrun_picalc.sh 1e9
+apptainer run -B /projects:/projects /projects/hep/fs10/mnxb11/containers/mnxb11_al9.latest.sif ./buildnrun_picalc.sh 3e8
+
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ cat .cac[Klculatepi.sbatch-anafer.sh
+[?2004lcat: .calculatepi.sbatch-anafer.sh: No such file or directory
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ cat .calculatepi.sbatch-anafer.sh[10P/runincontainer.shcalculatepi.sbatch-anafer.sh[C[C[C/calculatepi.sbatch-anafer.sh
+[?2004l#!/bin/sh
+
+#SBATCH -J "MNXB11 Pi homework"
+#SBATCH --time=00:07:01
+#SBATCH -A hep2023-1-6
+#SBATCH --mem=26G
+#SBATCH --output=pi_output.txt    
+#SBATCH --error=pi_error.txt      
+./runincontainer.sh
+
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ sbatch calculatepi.sbatch-anafer.sh
+[?2004lSubmitted batch job 1604456
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ squeue -u $USER
+[?2004l             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           1604456       hep MNXB11 P   anafer  R    INVALID      1 cx12
+           1604444       hep MNXB11 P   anafer  R       5:57      1 cx12
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ scontrol show job 1604456
+[?2004lJobId=1604456 JobName=MNXB11 Pi homework
+   UserId=anafer(33203) GroupId=mnxb11(32200) MCS_label=N/A
+   Priority=66727 Nice=0 Account=hep2023-1-6 QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:15 TimeLimit=00:08:00 TimeMin=N/A
+   SubmitTime=2025-09-25T19:52:47 EligibleTime=2025-09-25T19:52:47
+   AccrueTime=2025-09-25T19:52:47
+   StartTime=2025-09-25T19:52:48 EndTime=2025-09-25T20:00:48 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-09-25T19:52:48 Scheduler=Main
+   Partition=hep AllocNode:Sid=cosmos-pkf:149232
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=cx12
+   BatchHost=cx12
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=26G,node=1,billing=1
+   AllocTRES=cpu=1,mem=26G,node=1,billing=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=26G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts/calculatepi.sbatch-anafer.sh
+   WorkDir=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts
+   StdErr=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts/pi_error.txt
+   StdIn=/dev/null
+   StdOut=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts/pi_output.txt
+   Power=
+   
+
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ ls -l pi_output-[K.txt pi_error.txt
+[?2004l-rw-r--r-- 1 anafer mnxb11        0 Sep 25 19:52 pi_error.txt
+-rw-r--r-- 1 anafer mnxb11 13389763 Sep 25 19:52 pi_output.txt
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ s [Kbatch --job-name=WASTED calculatepi.sbatch-anafer. sh
+[?2004lSubmitted batch job 1604473
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ sbatch --job-name=WASTED calculatepi.sbatch-anafer.sh
+[?2004lSubmitted batch job 1604475
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ sbatch --job-name=WASTED calculatepi.sbatch-anafer.sh
+[?2004lSubmitted batch job 1604477
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ squeue -u $USER | grep WASR[KTED
+[?2004l           1604477       hep   [01;31m[KWASTED[m[K   anafer  R       0:10      1 cx12
+           1604475       hep   [01;31m[KWASTED[m[K   anafer  R       0:11      1 cx12
+           1604473       hep   [01;31m[KWASTED[m[K   anafer  R       0:14      1 cx12
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ scancel 1604477 1604475
+[?2004lkanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ squa[Keue -u $USER | grep Wast[K[K[KASTED
+[?2004l           1604473       hep   [01;31m[KWASTED[m[K   anafer  R       0:58      1 cx12
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ scontrol show job 1604473
+[?2004lJobId=1604473 JobName=WASTED
+   UserId=anafer(33203) GroupId=mnxb11(32200) MCS_label=N/A
+   Priority=66727 Nice=0 Account=hep2023-1-6 QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:01:11 TimeLimit=00:08:00 TimeMin=N/A
+   SubmitTime=2025-09-25T19:54:09 EligibleTime=2025-09-25T19:54:09
+   AccrueTime=2025-09-25T19:54:09
+   StartTime=2025-09-25T19:54:11 EndTime=2025-09-25T20:02:11 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2025-09-25T19:54:11 Scheduler=Main
+   Partition=hep AllocNode:Sid=cosmos-pkf:149232
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=cx12
+   BatchHost=cx12
+   NumNodes=1 NumCPUs=1 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=26G,node=1,billing=1
+   AllocTRES=cpu=1,mem=26G,node=1,billing=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=26G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts/calculatepi.sbatch-anafer.sh
+   WorkDir=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts
+   StdErr=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts/pi_error.txt
+   StdIn=/dev/null
+   StdOut=/home/anafer/git/MNXB11-homework/homework3/calculatePI/scripts/pi_output.txt
+   Power=
+   
+
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ sacct -u $USER
+[?2004lJobID           JobName  Partition    Account  AllocCPUS      State ExitCode 
+------------ ---------- ---------- ---------- ---------- ---------- -------- 
+1603407      MNXB11 Pi+        hep hep2023-1+          1  COMPLETED      0:0 
+1603407.bat+      batch            hep2023-1+          1  COMPLETED      0:0 
+1603407.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+1604403      MNXB11 Pi+        hep hep2023-1+          1  COMPLETED      0:0 
+1604403.bat+      batch            hep2023-1+          1  COMPLETED      0:0 
+1604403.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+1604404          WASTED        hep hep2023-1+          1 CANCELLED+      0:0 
+1604404.bat+      batch            hep2023-1+          1  CANCELLED     0:15 
+1604404.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+1604405          WASTED        hep hep2023-1+          1 CANCELLED+      0:0 
+1604405.bat+      batch            hep2023-1+          1  CANCELLED     0:15 
+1604405.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+1604408          WASTED        hep hep2023-1+          1  COMPLETED      0:0 
+1604408.bat+      batch            hep2023-1+          1  COMPLETED      0:0 
+1604408.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+1604444      MNXB11 Pi+        hep hep2023-1+          1  COMPLETED      0:0 
+1604444.bat+      batch            hep2023-1+          1  COMPLETED      0:0 
+1604444.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+1604456      MNXB11 Pi+        hep hep2023-1+          1    RUNNING      0:0 
+1604456.bat+      batch            hep2023-1+          1    RUNNING      0:0 
+1604456.ext+     extern            hep2023-1+          1    RUNNING      0:0 
+1604473          WASTED        hep hep2023-1+          1    RUNNING      0:0 
+1604473.bat+      batch            hep2023-1+          1    RUNNING      0:0 
+1604473.ext+     extern            hep2023-1+          1    RUNNING      0:0 
+1604475          WASTED        hep hep2023-1+          1 CANCELLED+      0:0 
+1604475.bat+      batch            hep2023-1+          1  CANCELLED     0:15 
+1604475.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+1604477          WASTED        hep hep2023-1+          1 CANCELLED+      0:0 
+1604477.bat+      batch            hep2023-1+          1  CANCELLED     0:15 
+1604477.ext+     extern            hep2023-1+          1  COMPLETED      0:0 
+kanafer@cosmos-pkf:~/git/MNXB11-homework/homework3/calculatePI/scripts\[?2004h[anafer@cosmos-pkf scripts]$ cat p[K[K[K[K[Kexit
+[?2004lexit
